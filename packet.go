@@ -232,6 +232,18 @@ func (q *Question) Serialize() []byte {
 	return buf
 }
 
+func NewQuestion(domain string, typ Type, class Class) (*Question, error) {
+	d, err := NewDomain(domain)
+	if err != nil {
+		return nil, err
+	}
+	return &Question{
+		Domain: d,
+		Type: typ,
+		Class: class,
+	}, nil
+}
+
 type Answer struct {
 	Domain Domain
 	Type Type
@@ -239,6 +251,21 @@ type Answer struct {
 	Ttl uint32
 	Rlength uint16
 	Rdata []byte
+}
+
+func NewAnswer(domain string, typ Type, class Class, ttl uint32, rdata []byte) (*Answer, error) {
+	d, err := NewDomain(domain)
+	if err != nil {
+		return nil, err
+	}
+	return &Answer{
+		Domain: d,
+		Type: typ,
+		Class: class,
+		Ttl: ttl,
+		Rlength: uint16(len(rdata)),
+		Rdata: rdata,
+	}, nil
 }
 
 func (a *Answer) Serialize() []byte {
@@ -268,6 +295,21 @@ type Authority struct {
 	Rdata []byte
 }
 
+func NewAuthority(domain string, typ Type, class Class, ttl uint32, rdata []byte) (*Authority, error) {
+	d, err := NewDomain(domain)
+	if err != nil {
+		return nil, err
+	}
+	return &Authority{
+		Domain: d,
+		Type: typ,
+		Class: class,
+		Ttl: ttl,
+		Rlength: uint16(len(rdata)),
+		Rdata: rdata,
+	}, nil
+}
+
 func (auth *Authority) Serialize() []byte {
 	buf := auth.Domain.Bytes()
 	tbuf := make([]byte, 2)
@@ -293,6 +335,21 @@ type Additional struct {
 	Ttl uint32
 	Rlength uint16
 	Rdata []byte
+}
+
+func NewAdditional(domain string, typ Type, class Class, ttl uint32, rdata []byte) (*Additional, error) {
+	d, err := NewDomain(domain)
+	if err != nil {
+		return nil, err
+	}
+	return &Additional{
+		Domain: d,
+		Type: typ,
+		Class: class,
+		Ttl: ttl,
+		Rlength: uint16(len(rdata)),
+		Rdata: rdata,
+	}, nil
 }
 
 func (add *Additional) Serialize() []byte {
